@@ -29,38 +29,59 @@ ChartJS.register(
   ArcElement
 );
 
-interface ChartData {
-  labels: string[];
-  datasets: { label: string; data: number[] }[];
-}
+import { ChartData as ChartJSData } from "chart.js";
+
+interface ChartData extends ChartJSData<"bar" | "line" | "pie"> {} 
 
 export default function Dashboard() {
   const [lineData, setLineData] = useState<ChartData | null>(null);
   const [barData, setBarData] = useState<ChartData | null>(null);
   const [pieData, setPieData] = useState<ChartData | null>(null);
 
+
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/line-chart-data/").then((response) =>
       setLineData({
         labels: response.data.labels,
-        datasets: [{ label: "Line Chart", data: response.data.data, backgroundColor: "rgb(75, 192, 192)" }]
+        datasets: [
+          {
+            label: "Line Chart",
+            data: response.data.data,
+            backgroundColor: "rgb(75, 192, 192)", // ✅ Now TypeScript recognizes this
+            borderColor: "rgb(75, 192, 192)", // Add this for visibility
+            fill: false, // Optional for line charts
+          },
+        ],
       })
     );
-
+  
     axios.get("http://127.0.0.1:8000/api/bar-chart-data/").then((response) =>
       setBarData({
         labels: response.data.labels,
-        datasets: [{ label: "Bar Chart", data: response.data.data, backgroundColor: "rgb(255, 99, 132)" }]
+        datasets: [
+          {
+            label: "Bar Chart",
+            data: response.data.data,
+            backgroundColor: "rgb(255, 99, 132)", // ✅ Now recognized
+          },
+        ],
       })
     );
-
+  
     axios.get("http://127.0.0.1:8000/api/pie-chart-data/").then((response) =>
       setPieData({
         labels: response.data.labels,
-        datasets: [{ label: "Pie Chart", data: response.data.data, backgroundColor: ["#f87171", "#60a5fa", "#facc15"] }]
+        datasets: [
+          {
+            label: "Pie Chart",
+            data: response.data.data,
+            backgroundColor: ["#f87171", "#60a5fa", "#facc15"], // ✅ TypeScript fix for Pie Chart
+          },
+        ],
       })
     );
   }, []);
+  
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

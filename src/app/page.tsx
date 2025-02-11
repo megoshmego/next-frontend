@@ -1,20 +1,6 @@
-"use client";
-
-
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Bar, Line, Pie } from "react-chartjs-2";
-import { ChartData } from "chart.js"; // ✅ Use Chart.js built-in type
-
-export default function Dashboard() {
-  const [lineData, setLineData] = useState<ChartData<"line"> | null>(null);
-  const [barData, setBarData] = useState<ChartData<"bar"> | null>(null);
-  const [pieData, setPieData] = useState<ChartData<"pie"> | null>(null);
-
-  const API_BASE_URL = "https://django-backend-qyn7.onrender.com/api/";
-
-  useEffect(() => {
-    axios.get(`${API_BASE_URL}line-chart-data/`).then((response) =>
+useEffect(() => {
+  axios.get("https://django-backend-qyn7.onrender.com/api/line-chart-data/")
+    .then((response) =>
       setLineData({
         labels: response.data.labels,
         datasets: [
@@ -28,8 +14,9 @@ export default function Dashboard() {
         ],
       })
     );
-  
-    axios.get(`${API_BASE_URL}bar-chart-data/`).then((response) =>
+
+  axios.get("https://django-backend-qyn7.onrender.com/api/bar-chart-data/")
+    .then((response) =>
       setBarData({
         labels: response.data.labels,
         datasets: [
@@ -41,8 +28,9 @@ export default function Dashboard() {
         ],
       })
     );
-  
-    axios.get(`${API_BASE_URL}pie-chart-data/`).then((response) =>
+
+  axios.get("https://django-backend-qyn7.onrender.com/api/pie-chart-data/")
+    .then((response) =>
       setPieData({
         labels: response.data.labels,
         datasets: [
@@ -54,5 +42,4 @@ export default function Dashboard() {
         ],
       })
     );
-  }, []);
-  
+}, []);
